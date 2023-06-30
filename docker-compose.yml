@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  api:
+    container_name: api
+    restart: always
+    build: .
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - db
+    volumes:
+    - .:/usr/src/app
+  db:
+    container_name: postgres
+    image: postgres
+    ports:
+      - '${DB_PORT}:${DB_PORT}'
+    volumes:
+      - data:/data/db
+      - ./sql/initial.sql:/docker-entrypoint-initdb.d/initial.sql
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+    user: 
+      postgres
+
+volumes: 
+ data: {}
